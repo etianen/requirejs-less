@@ -1,4 +1,4 @@
-# require-style changelog
+# requirejs-less changelog
 
 
 0.9.0 - 28/04/2014

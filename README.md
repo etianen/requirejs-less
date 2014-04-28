@@ -1,4 +1,4 @@
-# require-style
+# requirejs-less
 
 LESS stylesheet loader plugin for RequireJS.
 
@@ -6,16 +6,16 @@ LESS stylesheet loader plugin for RequireJS.
 ## Features
 
 * Load LESS stylesheets using RequireJS.
-* Inline LESS stylesheets into your javascript during r.js optimization (NodeJS only).
+* Inline compiled LESS stylesheets during r.js optimization (NodeJS only).
 * MD5-fingerprint CSS assets referenced in your LESS stylesheets (NodeJS only).
 
 
 ## Installation
 
-Copy the `style.js` script into your RequireJS `baseURL`. You can also install require-style using [bower](http://bower.io/):
+Copy the `style.js` script into your RequireJS `baseURL`. You can also install requirejs-less using [bower](http://bower.io/):
 
 ``` bash
-$ bower install require-style
+$ bower install requirejs-less
 ```
 
 
@@ -51,7 +51,7 @@ define([
 
 ## Configuration
 
-Configure require-style using the RequireJS config options:
+Configure requirejs-less using the RequireJS config options:
 
 ``` js
 require.config({
@@ -99,8 +99,8 @@ and inlined into the built file, avoiding additional network requests in product
 
 ## Support and announcements
 
-The require-style project was developed by Dave Hall. You can get the code
-from the [require-style project site](http://github.com/etianen/require-style).
+The requirejs-less project was developed by Dave Hall. You can get the code
+from the [requirejs-less project site](http://github.com/etianen/requirejs-less).
 
 
 ## More information
