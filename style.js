@@ -42,8 +42,6 @@ define([
 
     var moduleConfig = module.config();
     var lessPath = moduleConfig.path || "../less/";
-    var lessUrl = require.toUrl(lessPath);
-    var rootUrl = require.toUrl(moduleConfig.rootPath || lessPath);
     var fingerprintUrls = moduleConfig.fingerprintUrls || false;
     var fingerprintFiles = moduleConfig.fingerprintFiles || false;
 
@@ -77,6 +75,8 @@ define([
         },
 
         _build: function(name, onload) {
+            var lessUrl = require.toUrl(lessPath);
+            var rootUrl = require.toUrl(moduleConfig.rootPath || lessPath);
             // Perform an optimizing build.
             var less = require.nodeRequire("less");
             var crypto = require.nodeRequire("crypto");
@@ -133,6 +133,8 @@ define([
         },
 
         _load: function(name, onload) {
+            var lessUrl = require.toUrl(lessPath);
+            var rootUrl = require.toUrl(moduleConfig.rootPath || lessPath);
             // Perform an in-browser build.
             var url = lessUrl + name;
             require(["less"], function(less, contents) {
