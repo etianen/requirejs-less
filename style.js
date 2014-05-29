@@ -91,7 +91,7 @@ define([
                 syncImport: true,
                 env: "production",
                 paths: [lessUrl],
-                rootpath: rootUrl
+                rootPath: rootUrl
             }, {
                 compress: true
             }, onload.error, function(css) {
