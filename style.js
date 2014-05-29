@@ -85,7 +85,7 @@ define([
             var pathlib = require.nodeRequire("path");
             // Load the contents.
             var url = pathlib.join(lessUrl, name);
-            var contents = fs.readFileSync(url, encoding="utf-8");
+            var contents = fs.readFileSync(url, "utf-8");
             // Compile the LESS.
             style._compile(less, url, contents, {
                 syncImport: true,
@@ -98,8 +98,8 @@ define([
                 css = css.replace(/(url\(['"]?\s*)(.*?)(["']?\))/gi, function(_, start, assetUrl, end) {
                     var originalAssetUrl = assetUrl;
                     // MD5 fingerprint the file.
-                    if (moduleConfig.fingerprintUrls) {
-                        var pathname = path.join(lessUrl, assetUrl);
+                    if (fingerprintUrls) {
+                        var pathname = pathlib.join(lessUrl, assetUrl);
                         if (fs.existsSync(pathname)) {
                             var assetContents = fs.readFileSync(pathname);
                             var hash = crypto.createHash("md5");
@@ -111,7 +111,7 @@ define([
                             var dirname = pathlib.dirname(assetUrl);
                             assetUrl = pathlib.join(dirname, basename + "." + hashStr + extension);
                             // Save the new file.
-                            var hashedPathname = path.join(lessUrl, assetUrl);
+                            var hashedPathname = pathlib.join(lessUrl, assetUrl);
                             if (fingerprintFiles && !fs.existsSync(hashedPathname)) {
                                 fs.writeFileSync(hashedPathname, assetContents);
                             }
@@ -137,7 +137,7 @@ define([
             var rootUrl = require.toUrl(moduleConfig.rootPath || lessPath);
             // Perform an in-browser build.
             var url = lessUrl + name;
-            require(["less"], function(less, contents) {
+            require(["less"], function(less) {
                 text.get(url, function(contents) {
                     style._compile(less, url, contents, {
                         env: "development",
