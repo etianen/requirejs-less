@@ -90,7 +90,8 @@ define([
             style._compile(less, url, contents, {
                 syncImport: true,
                 env: "production",
-                paths: [lessUrl]
+                paths: [lessUrl],
+                rootpath: rootUrl
             }, {
                 compress: true
             }, onload.error, function(css) {
