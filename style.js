@@ -102,7 +102,8 @@ define([
                 text.get(url, function(contents) {
                     style._compile(less, url, contents, {
                         env: "development",
-                        paths: [lessUrl]
+                        paths: [lessUrl],
+                        rootpath: lessUrl
                     }, {}, onload.error, function(css) {
                         style._injectCSS(css);
                         onload(css);
