@@ -56,13 +56,15 @@ Configure requirejs-less using the RequireJS config options:
 require.config({
     config: {
         style: {
-            path: "../less/"
+            path: "../less/",
+            rootPath: "/static/less/"
         }
     }
 })
 ```
 
 * **path** - The relative path to LESS stylesheets. This should be relative to `baseURL`.
+* **rootPath** - The absolute URL to LESS stylesheets. This is **required** in order to perform and optimizing build.
 
 
 ## How it works

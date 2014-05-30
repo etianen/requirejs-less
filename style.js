@@ -42,6 +42,7 @@ define([
 
     var moduleConfig = module.config();
     var lessPath = moduleConfig.path || "../less/";
+    var lessRootPath = moduleConfig.rootPath;
 
     var buildMap = {};
 
@@ -74,6 +75,10 @@ define([
 
         _build: function(name, onload) {
             var lessUrl = require.toUrl(lessPath);
+            // Check for a root path.
+            if (!lessRootPath) {
+                throw new Error("To use an optimizing LESS build, you must specify config.style.rootPath as an absolute URL.");
+            }
             // Perform an optimizing build.
             var less = require.nodeRequire("less");
             // Load the contents.
@@ -83,7 +88,8 @@ define([
                 style._compile(less, url, contents, {
                     syncImport: true,
                     env: "production",
-                    paths: [lessUrl]
+                    paths: [lessUrl],
+                    rootpath: lessRootPath
                 }, {
                     compress: true
                 }, onload.error, function(css) {
