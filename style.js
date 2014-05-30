@@ -42,8 +42,6 @@ define([
 
     var moduleConfig = module.config();
     var lessPath = moduleConfig.path || "../less/";
-    var fingerprintUrls = moduleConfig.fingerprintUrls || false;
-    var fingerprintFiles = moduleConfig.fingerprintFiles || false;
 
     var buildMap = {};
 
@@ -76,74 +74,35 @@ define([
 
         _build: function(name, onload) {
             var lessUrl = require.toUrl(lessPath);
-            var rootUrl = require.toUrl(moduleConfig.rootPath || lessPath);
             // Perform an optimizing build.
             var less = require.nodeRequire("less");
-            var crypto = require.nodeRequire("crypto");
-            var fs = require.nodeRequire("fs");
-            var urllib = require.nodeRequire("url");
-            var pathlib = require.nodeRequire("path");
             // Load the contents.
-            var url = pathlib.join(lessUrl, name);
-            var contents = fs.readFileSync(url, "utf-8");
-            // Compile the LESS.
-            style._compile(less, url, contents, {
-                syncImport: true,
-                env: "production",
-                paths: [lessUrl],
-                rootPath: rootUrl
-            }, {
-                compress: true
-            }, onload.error, function(css) {
-                // Fingerprint URLs.
-                css = css.replace(/(url\(['"]?\s*)(.*?)(["']?\))/gi, function(_, start, assetUrl, end) {
-                    var originalAssetUrl = assetUrl;
-                    // MD5 fingerprint the file.
-                    if (fingerprintUrls) {
-                        var pathname = pathlib.join(lessUrl, assetUrl);
-                        if (fs.existsSync(pathname)) {
-                            var assetContents = fs.readFileSync(pathname);
-                            var hash = crypto.createHash("md5");
-                            hash.update(assetContents);
-                            var hashStr = hash.digest("hex").substring(0, 12);
-                            // Create the hashed name.
-                            var extension = pathlib.extname(assetUrl);
-                            var basename = pathlib.basename(assetUrl, extension);
-                            var dirname = pathlib.dirname(assetUrl);
-                            assetUrl = pathlib.join(dirname, basename + "." + hashStr + extension);
-                            // Save the new file.
-                            var hashedPathname = pathlib.join(lessUrl, assetUrl);
-                            if (fingerprintFiles && !fs.existsSync(hashedPathname)) {
-                                fs.writeFileSync(hashedPathname, assetContents);
-                            }
-                        }
-                    }
-                    // Make the path name absolute;
-                    var assetPath = urllib.resolve(lessUrl, assetUrl);
-                    assetUrl = urllib.resolve(rootUrl, assetUrl);
-                    if (assetUrl == assetPath) {
-                        throw new Error("Cannot resolve " + originalAssetUrl + ". Please configure rootPath to be an absolute URL.");
-                    }
-                    // All done!
-                    return start + assetUrl + end;
+            var url = lessUrl + name;
+            text.get(url, function(contents) {
+                // Compile the LESS.
+                style._compile(less, url, contents, {
+                    syncImport: true,
+                    env: "production",
+                    paths: [lessUrl]
+                }, {
+                    compress: true
+                }, onload.error, function(css) {
+                    // Store the generated CSS.
+                    buildMap[name] = css;
+                    onload(css);
                 });
-                // Store the generated CSS.
-                buildMap[name] = css;
-                onload(css);
             });
         },
 
         _load: function(name, onload) {
             var lessUrl = require.toUrl(lessPath);
-            var rootUrl = require.toUrl(moduleConfig.rootPath || lessPath);
             // Perform an in-browser build.
             var url = lessUrl + name;
             require(["less"], function(less) {
                 text.get(url, function(contents) {
                     style._compile(less, url, contents, {
                         env: "development",
-                        paths: [lessUrl],
-                        rootpath: rootUrl
+                        paths: [lessUrl]
                     }, {}, onload.error, function(css) {
                         style._injectCSS(css);
                         onload(css);

@@ -7,7 +7,6 @@ LESS stylesheet loader plugin for RequireJS.
 
 * Load LESS stylesheets using RequireJS.
 * Inline compiled LESS stylesheets during r.js optimization (NodeJS only).
-* MD5-fingerprint CSS assets referenced in your LESS stylesheets (NodeJS only).
 
 
 ## Installation
@@ -57,35 +56,13 @@ Configure requirejs-less using the RequireJS config options:
 require.config({
     config: {
         style: {
-            path: "../less/",
-            rootPath: "../less/",
-            fingerprintUrls: false,
-            fingerprintFiles: true
+            path: "../less/"
         }
     }
 })
 ```
 
-* **path** - The relative path to LESS stylesheets on the filesystem. This should be relative to `baseURL`.
-* **rootPath** - The path to where LESS stylesheets are stored on the server. If relative, it will be taken relative to `baseURL`.
-* **fingerprintUrls** - Set to `true` to append MD5 fingerprints to the URLs of static asset urls in your LESS stylesheets (Default `false`).
-* **fingerprintFiles** - Set to `true` to write a copy of fingerprinted files to their hashed name to the filesystem. (Default `true`, set to false if your build system already writes MD5-hashed files.)
-
-**Important** - If your LESS files contain relative urls, you must set `rootPath` to an absolute URL
-in your build profile order to run r.js. Otherwise, r.js will be unable to resolve relative URLS during the build.
-For example:
-
-``` js
-({
-    appDir: "./static/js/",
-    baseUrl: "./",
-    config: {
-        style: {
-            rootPath: "/static/css/"
-        }
-    }
-})
-```
+* **path** - The relative path to LESS stylesheets. This should be relative to `baseURL`.
 
 
 ## How it works
